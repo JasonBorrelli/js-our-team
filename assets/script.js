@@ -51,9 +51,9 @@ function createMemberCard(member) {
   const { name, role, email, img } = member;
   return `
     <li class="col">
-        <div class="text-center bg-black text-white pt-3 pb-1 shadow rounded-5">
-          <img class="img-fluid rounded-1" 
-               src="${img}" 
+        <div class="text-center bg-black text-white pt-3 pb-1 shadow rounded-5 ">
+          <img class="img-fluid rounded-1 w-25  " 
+               src="${img} " 
                alt="${name}">
           <h3 class="mt-2">${name}</h3> 
           <p class="mb-1">${role}</p>
