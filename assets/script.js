@@ -1,4 +1,5 @@
-const teamMembers = [
+// Array iniziale dei membri del team di default
+const initialTeamMembers = [
   {
     name: "Marco Bianchi",
     role: "Designer",
@@ -37,49 +38,69 @@ const teamMembers = [
   }
 ];
 
+// Recupero dati da localStorage se presenti, altrimenti uso l'array iniziale
+let savedMembers = localStorage.getItem("teamMembers");
+let teamMembers = savedMembers ? JSON.parse(savedMembers) : initialTeamMembers;
 
-//trovare elemento team-list
+// Elementi del DOM
 const teamList = document.querySelector(".team-list");
-
-teamMembers.forEach(member => {
-  const { name, role, email, img } = member;
-  const card = `
-        <li class="col">
-            <div class="text-center bg-black text-white pt-3 pb-1 shadow rounded-5">
-              <img class="img-fluid rounded-1" 
-              src="${img}"
-              alt="${name}">
-              <h3>${name}</h3> 
-              <p>${role}</p>
-              <p>${email}</p>
-            </div>
-        </li>
-    `;
-  teamList.innerHTML += card;
-});
-
-//add new member
-
 const teamForm = document.querySelector(".team-form");
 
+// Funzione per generare il markup HTML di una card
+function createMemberCard(member) {
+  const { name, role, email, img } = member;
+  return `
+    <li class="col">
+        <div class="text-center bg-black text-white pt-3 pb-1 shadow rounded-5">
+          <img class="img-fluid rounded-1" 
+               src="${img}" 
+               alt="${name}">
+          <h3 class="mt-2">${name}</h3> 
+          <p class="mb-1">${role}</p>
+          <p class="text-secondary">${email}</p>
+        </div>
+    </li>
+  `;
+}
+
+// Funzione per renderizzare la lista completa dei membri
+function renderTeamList() {
+  teamList.innerHTML = "";
+  teamMembers.forEach(member => {
+    teamList.innerHTML += createMemberCard(member);
+  });
+}
+
+// Render iniziale dei membri
+renderTeamList();
+
+// Gestione submit del form per aggiungere un nuovo membro
 teamForm.addEventListener("submit", function (e) {
   e.preventDefault();
+
   const name = document.getElementById("name").value.trim();
   const role = document.getElementById("role").value.trim();
   const email = document.getElementById("email").value.trim();
   const img = document.getElementById("img").value.trim();
-  const member = { name, role, email, img };
-  teamMembers.push(member);
-  teamList.innerHTML += `
-        <li class="col">
-            <div class="text-center bg-black text-white pt-3 pb-1 shadow rounded-5">
-              <img class="img-fluid rounded-1" 
-              src="${img}"
-              alt="${name}">
-              <h3>${name}</h3> 
-              <p>${role}</p>
-              <p>${email}</p>
-            </div>
-        </li>
-    `;
+
+  if (!name || !role || !email || !img) {
+    return;
+  }
+
+  const newMember = { name, role, email, img };
+
+  // Aggiunta del nuovo membro all'array in memoria
+  teamMembers.push(newMember);
+
+  // Salvataggio dell'array aggiornato in localStorage
+  localStorage.setItem("teamMembers", JSON.stringify(teamMembers));
+
+  // Aggiunta della nuova card alla lista nel DOM
+  teamList.innerHTML += createMemberCard(newMember);
+
+  // Reset dei campi del form
+  teamForm.reset();
 });
+
+
+
