@@ -39,12 +39,12 @@ const initialTeamMembers = [
 ];
 
 // Recupero dati da localStorage se presenti, altrimenti uso l'array iniziale
-let savedMembers = localStorage.getItem("teamMembers");
-let teamMembers = savedMembers ? JSON.parse(savedMembers) : initialTeamMembers;
+let savedMembers = localStorage.getItem("teamMembers");                                // salvo i dati nel local storage
+let teamMembers = savedMembers ? JSON.parse(savedMembers) : initialTeamMembers;       // recupero i dati dal local storage  
 
 // Elementi del DOM
-const teamList = document.querySelector(".team-list");
-const teamForm = document.querySelector(".team-form");
+const teamList = document.querySelector(".team-list");          // elementi del team
+const teamForm = document.querySelector(".team-form");        // form per aggiungere un nuovo membro
 
 // Funzione per generare il markup HTML di una card
 function createMemberCard(member) {
@@ -64,42 +64,42 @@ function createMemberCard(member) {
 }
 
 // Funzione per renderizzare la lista completa dei membri
-function renderTeamList() {
-  teamList.innerHTML = "";
-  teamMembers.forEach(member => {
-    teamList.innerHTML += createMemberCard(member);
+function renderTeamList() {                                             //  funzione per renderizzare la lista completa dei membri
+  teamList.innerHTML = "";                                               // svuota la lista
+  teamMembers.forEach(member => {                                         // scorre l'array dei membri
+    teamList.innerHTML += createMemberCard(member);                        // aggiunge la card del membro alla lista
   });
 }
 
 // Render iniziale dei membri
-renderTeamList();
+renderTeamList();                                                        // renderizza la lista completa dei membri
 
 // Gestione submit del form per aggiungere un nuovo membro
-teamForm.addEventListener("submit", function (e) {
-  e.preventDefault();
+teamForm.addEventListener("submit", function (e) {                        //  gestisce l'evento submit del form
+  e.preventDefault();                                                   // impedisce il refresh della pagina al submit del form
 
-  const name = document.getElementById("name").value.trim();
-  const role = document.getElementById("role").value.trim();
-  const email = document.getElementById("email").value.trim();
-  const img = document.getElementById("img").value.trim();
+  const name = document.getElementById("name").value.trim();               // prendo i dati del form
+  const role = document.getElementById("role").value.trim();             // prendo i dati del form
+  const email = document.getElementById("email").value.trim();           // prendo i dati del form
+  const img = document.getElementById("img").value.trim();               // prendo i dati del form
 
-  if (!name || !role || !email || !img) {
-    return;
+  if (!name || !role || !email || !img) {                   // controllo che i dati non siano vuoti
+    return;                                                 // se i dati sono vuoti, non aggiungo il membro
   }
 
-  const newMember = { name, role, email, img };
+  const newMember = { name, role, email, img };              // creo un nuovo membro
 
-  // Aggiunta del nuovo membro all'array in memoria
-  teamMembers.push(newMember);
+  // Aggiunta del nuovo membro all'array in memoria          
+  teamMembers.push(newMember);                                 // aggiungo il nuovo membro all'array
 
   // Salvataggio dell'array aggiornato in localStorage
-  localStorage.setItem("teamMembers", JSON.stringify(teamMembers));
+  localStorage.setItem("teamMembers", JSON.stringify(teamMembers));         // salvo l'array aggiornato in localStorage
 
   // Aggiunta della nuova card alla lista nel DOM
-  teamList.innerHTML += createMemberCard(newMember);
+  teamList.innerHTML += createMemberCard(newMember);                         // aggiungo la card del nuovo membro alla lista
 
   // Reset dei campi del form
-  teamForm.reset();
+  teamForm.reset();                                                        // reset del form
 });
 
 
